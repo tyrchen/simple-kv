@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["gen_cert","gen_config","kvc","kvs","simple_kv"];
