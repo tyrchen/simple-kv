@@ -133,11 +133,10 @@ mod tests {
         Service: From<ServiceInner<Store>>,
     {
         let f = |stream, service: Service| {
-            let svc = service.clone();
             YamuxCtrl::new_server(stream, None, move |s| {
-                let svc1 = svc.clone();
+                let svc = service.clone();
                 async move {
-                    let stream = ProstServerStream::new(s.compat(), svc1);
+                    let stream = ProstServerStream::new(s.compat(), svc);
                     stream.process().await.unwrap();
                     Ok(())
                 }

@@ -45,13 +45,13 @@ impl Storage for SledDb {
     }
 
     fn contains(&self, table: &str, key: &str) -> Result<bool, KvError> {
-        let name = SledDb::get_full_key(table, &key);
+        let name = SledDb::get_full_key(table, key);
 
         Ok(self.0.contains_key(name)?)
     }
 
     fn del(&self, table: &str, key: &str) -> Result<Option<Value>, KvError> {
-        let name = SledDb::get_full_key(table, &key);
+        let name = SledDb::get_full_key(table, key);
 
         let result = self.0.remove(name)?.map(|v| v.as_ref().try_into());
         flip(result)
@@ -85,7 +85,7 @@ impl From<Result<(IVec, IVec), sled::Error>> for Kvpair {
 
 fn ivec_to_key(ivec: &[u8]) -> &str {
     let s = str::from_utf8(ivec).unwrap();
-    let mut iter = s.split(":");
+    let mut iter = s.split(':');
     iter.next();
     iter.next().unwrap()
 }

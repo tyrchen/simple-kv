@@ -122,16 +122,18 @@ impl CommandRequest {
 
 impl CommandResponse {
     pub fn ok() -> Self {
-        let mut result = CommandResponse::default();
-        result.status = StatusCode::OK.as_u16() as _;
-        result
+        CommandResponse {
+            status: StatusCode::OK.as_u16() as _,
+            ..Default::default()
+        }
     }
 
     pub fn internal_error(msg: String) -> Self {
-        let mut result = CommandResponse::default();
-        result.status = StatusCode::INTERNAL_SERVER_ERROR.as_u16() as _;
-        result.message = msg;
-        result
+        CommandResponse {
+            status: StatusCode::INTERNAL_SERVER_ERROR.as_u16() as _,
+            message: msg,
+            ..Default::default()
+        }
     }
 
     /// 转换成 string 做错误处理

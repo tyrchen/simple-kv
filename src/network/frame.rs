@@ -127,7 +127,7 @@ mod tests {
         cmd.encode_frame(&mut buf).unwrap();
 
         // 最高位没设置
-        assert_eq!(is_compressed(&buf), false);
+        assert!(!is_compressed(&buf));
 
         let cmd1 = CommandRequest::decode_frame(&mut buf).unwrap();
         assert_eq!(cmd, cmd1);
@@ -142,7 +142,7 @@ mod tests {
         res.encode_frame(&mut buf).unwrap();
 
         // 最高位没设置
-        assert_eq!(is_compressed(&buf), false);
+        assert!(!is_compressed(&buf));
 
         let res1 = CommandResponse::decode_frame(&mut buf).unwrap();
         assert_eq!(res, res1);
@@ -157,7 +157,7 @@ mod tests {
         res.encode_frame(&mut buf).unwrap();
 
         // 最高位设置了
-        assert_eq!(is_compressed(&buf), true);
+        assert!(is_compressed(&buf));
 
         let res1 = CommandResponse::decode_frame(&mut buf).unwrap();
         assert_eq!(res, res1);
@@ -178,7 +178,7 @@ mod tests {
     }
 
     fn is_compressed(data: &[u8]) -> bool {
-        if let &[v] = &data[..1] {
+        if let [v] = data[..1] {
             v >> 7 == 1
         } else {
             false

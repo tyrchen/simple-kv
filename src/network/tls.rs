@@ -108,7 +108,7 @@ impl TlsServerAcceptor {
         config
             .set_single_cert(certs, key)
             .map_err(|_| KvError::CertifcateParseError("server", "cert"))?;
-        config.set_protocols(&[Vec::from(&ALPN_KV[..])]);
+        config.set_protocols(&[Vec::from(ALPN_KV)]);
 
         Ok(Self {
             inner: Arc::new(config),

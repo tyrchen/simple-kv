@@ -36,7 +36,7 @@ where
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         // 上一次调用结束后 rbuf 应该为空
-        assert!(self.rbuf.len() == 0);
+        assert!(self.rbuf.is_empty());
 
         // 从 rbuf 中分离出 rest（摆脱对 self 的引用）
         let mut rest = self.rbuf.split_off(0);
@@ -146,7 +146,7 @@ mod tests {
         if let Some(Ok(s)) = stream.next().await {
             assert_eq!(s, cmd);
         } else {
-            assert!(false);
+            unreachable!();
         }
         Ok(())
     }

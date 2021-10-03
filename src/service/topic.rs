@@ -81,30 +81,28 @@ impl Topic for Arc<Broadcaster> {
     fn publish(self, name: String, value: Arc<CommandResponse>) {
         tokio::spawn(async move {
             let mut ids = vec![];
-            match self.topics.get(&name) {
-                Some(topic) => {
-                    // 复制整个 topic 下所有的 subscription id
-                    // 这里我们每个 id 是 u32，如果一个 topic 下有 10k 订阅，复制的成本
-                    // 也就是 40k 堆内存（外加一些控制结构），所以效率不算差
-                    // 这也是为什么我们用 NEXT_ID 来控制 subscription id 的生成
+            if let Some(topic) = self.topics.get(&name) {
+                // 复制整个 topic 下所有的 subscription id
+                // 这里我们每个 id 是 u32，如果一个 topic 下有 10k 订阅，复制的成本
+                // 也就是 40k 堆内存（外加一些控制结构），所以效率不算差
+                // 这也是为什么我们用 NEXT_ID 来控制 subscription id 的生成
 
-                    let subscriptions = topic.value().clone();
-                    // 尽快释放锁
-                    drop(topic);
+                let subscriptions = topic.value().clone();
+                // 尽快释放锁
+                drop(topic);
 
-                    // 循环发送
-                    for id in subscriptions.into_iter() {
-                        if let Some(tx) = self.subscriptions.get(&id) {
-                            if let Err(e) = tx.send(value.clone()).await {
-                                warn!("Publish to {} failed! error: {:?}", id, e);
-                                // client 中断连接
-                                ids.push(id);
-                            }
+                // 循环发送
+                for id in subscriptions.into_iter() {
+                    if let Some(tx) = self.subscriptions.get(&id) {
+                        if let Err(e) = tx.send(value.clone()).await {
+                            warn!("Publish to {} failed! error: {:?}", id, e);
+                            // client 中断连接
+                            ids.push(id);
                         }
                     }
                 }
-                None => {}
             }
+
             for id in ids {
                 self.remove_subscription(name.clone(), id);
             }

@@ -109,9 +109,9 @@ mod tests {
         assert!(store.get("t2", "hello1").unwrap().is_none());
 
         // contains 纯在的 key 返回 true，否则 false
-        assert_eq!(store.contains("t1", "hello").unwrap(), true);
-        assert_eq!(store.contains("t1", "hello1").unwrap(), false);
-        assert_eq!(store.contains("t2", "hello").unwrap(), false);
+        assert!(store.contains("t1", "hello").unwrap());
+        assert!(!store.contains("t1", "hello1").unwrap());
+        assert!(!store.contains("t2", "hello").unwrap());
 
         // del 存在的 key 返回之前的值
         let v = store.del("t1", "hello");
