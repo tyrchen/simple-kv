@@ -56,9 +56,11 @@ jobs:
           asset_path: ./target/release/kvs
           asset_name: kvs
           asset_content_type: application/octet-stream
+      - name: Generate docs
+        run: cargo doc --all-features --no-deps
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Deploy
+      - name: Deploy docs to github actions
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
