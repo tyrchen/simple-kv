@@ -47,3 +47,8 @@ jobs:
         run: cargo test --all-features -- --test-threads=1 --nocapture
       - name: Generate docs
         run: cargo doc --all-features --no-deps
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./target/doc/simple_kv
