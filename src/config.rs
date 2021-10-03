@@ -23,6 +23,9 @@ pub struct GeneralConfig {
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct LogConfig {
+    pub enable_log_file: bool,
+    pub enable_jaeger: bool,
+    pub log_level: String,
     pub path: String,
     pub rotation: RotationConfig,
 }

@@ -22,6 +22,9 @@ fn main() -> Result<()> {
             ca: None,
         },
         log: LogConfig {
+            enable_jaeger: false,
+            enable_log_file: false,
+            log_level: "info".to_string(),
             path: "/tmp/kv-log".into(),
             rotation: RotationConfig::Daily,
         },
