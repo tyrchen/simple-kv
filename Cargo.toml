@@ -55,3 +55,6 @@ prost-build = "0.8" # 编译 protobuf
 [[bench]]
 name = "pubsub"
 harness = false
+
+[profile.bench]
+debug = true
