@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["simple_kv"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.55.0/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"enum\" href=\"simple_kv/enum.KvError.html\" title=\"enum simple_kv::KvError\">KvError</a>","synthetic":false,"types":["simple_kv::error::KvError"]}];
+implementors["simple_kv"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.58.1/core/fmt/trait.Display.html\" title=\"trait core::fmt::Display\">Display</a> for <a class=\"enum\" href=\"simple_kv/enum.KvError.html\" title=\"enum simple_kv::KvError\">KvError</a>","synthetic":false,"types":["simple_kv::error::KvError"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
