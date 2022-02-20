@@ -1,6 +1,6 @@
 [package]
 name = "simple-kv"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2021"
 
 [[bin]]
@@ -22,12 +22,12 @@ path = "tools/gen_config.rs"
 [dependencies]
 anyhow = "1" # 错误处理
 bytes = "1" # 高效处理网络 buffer 的库
-certify = "0.3" # 创建 x509 cert
-dashmap = "4" # 并发 HashMap
+certify = "0.4" # 创建 x509 cert
+dashmap = "5" # 并发 HashMap
 flate2 = "1" # gzip 压缩
 futures = "0.3" # 提供 Stream trait
 http = "0.2" # 我们使用 HTTP status code 所以引入这个类型库
-opentelemetry-jaeger = "0.15" # opentelemetry jaeger 支持
+opentelemetry-jaeger = "0.16" # opentelemetry jaeger 支持
 prost = "0.9" # 处理 protobuf 的代码
 rustls-native-certs = "0.5" # 加载本机信任证书
 serde = { version = "1", features = ["derive"] } # 序列化/反序列化
@@ -36,13 +36,13 @@ thiserror = "1" # 错误定义和处理
 tokio = { version = "1", features = ["full" ] } # 异步网络库
 tokio-rustls = "0.22" # 处理 TLS
 tokio-stream = { version = "0.1", features = ["sync"] } # 处理 stream
-tokio-util = { version = "0.6", features = ["compat"]} # tokio 和 futures 的兼容性库
+tokio-util = { version = "0.7", features = ["compat"]} # tokio 和 futures 的兼容性库
 toml = "0.5" # toml 支持
 tracing = "0.1" # 日志处理
-tracing-appender = "0.1" # 文件日志
-tracing-opentelemetry = "0.15" # opentelemetry 支持
-tracing-subscriber = { version = "0.2", features = ["json", "chrono"] } # 日志处理
-yamux = "0.9" # yamux 多路复用支持
+tracing-appender = "0.2" # 文件日志
+tracing-opentelemetry = "0.17" # opentelemetry 支持
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] } # 日志处理
+yamux = "0.10" # yamux 多路复用支持
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ["async_futures", "async_tokio", "html_reports"] } # benchmark

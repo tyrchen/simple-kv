@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
         .with(opentelemetry.with_filter(jaeger_level))
         .init();
 
-    let root = span!(tracing::Level::INFO, "app_start", work_units = 2);
+    let root = span!(tracing::Level::INFO, "app_start");
     let _enter = root.enter();
 
     start_server_with_config(&config).await?;
