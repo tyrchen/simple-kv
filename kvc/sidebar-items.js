@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["main",""],["start_publishing",""],["start_unsubscribe",""]]});
+initSidebarItems({"fn":[["main",""],["process",""],["start_publishing",""],["start_unsubscribe",""]]});

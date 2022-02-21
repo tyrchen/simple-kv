@@ -85,7 +85,7 @@
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">config</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">env::var</span>(<span class="string">&quot;KV_SERVER_CONFIG&quot;</span>) {
         <span class="prelude-val">Ok</span>(<span class="ident">path</span>) =&gt; <span class="ident">fs::read_to_string</span>(<span class="kw-2">&amp;</span><span class="ident">path</span>).<span class="kw">await</span><span class="question-mark">?</span>,
-        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">include_str!</span>(<span class="string">&quot;../fixtures/server.conf&quot;</span>).<span class="ident">to_string</span>(),
+        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">include_str!</span>(<span class="string">&quot;../fixtures/quic_server.conf&quot;</span>).<span class="ident">to_string</span>(),
     };
     <span class="kw">let</span> <span class="ident">config</span>: <span class="ident">ServerConfig</span> <span class="op">=</span> <span class="ident">toml::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">config</span>)<span class="question-mark">?</span>;
     <span class="kw">let</span> <span class="ident">log</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">config</span>.<span class="ident">log</span>;

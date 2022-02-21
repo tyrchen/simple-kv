@@ -53,10 +53,11 @@
 <span id="52">52</span>
 <span id="53">53</span>
 <span id="54">54</span>
+<span id="55">55</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">anyhow::Result</span>;
 <span class="kw">use</span> <span class="ident">simple_kv</span>::{
-    <span class="ident">ClientConfig</span>, <span class="ident">ClientTlsConfig</span>, <span class="ident">GeneralConfig</span>, <span class="ident">LogConfig</span>, <span class="ident">RotationConfig</span>, <span class="ident">ServerConfig</span>,
-    <span class="ident">ServerTlsConfig</span>, <span class="ident">StorageConfig</span>,
+    <span class="ident">ClientConfig</span>, <span class="ident">ClientTlsConfig</span>, <span class="ident">GeneralConfig</span>, <span class="ident">LogConfig</span>, <span class="ident">NetworkType</span>, <span class="ident">RotationConfig</span>,
+    <span class="ident">ServerConfig</span>, <span class="ident">ServerTlsConfig</span>, <span class="ident">StorageConfig</span>,
 };
 <span class="kw">use</span> <span class="ident">std::fs</span>;
 
@@ -67,6 +68,7 @@
 
     <span class="kw">let</span> <span class="ident">general_config</span> <span class="op">=</span> <span class="ident">GeneralConfig</span> {
         <span class="ident">addr</span>: <span class="string">&quot;127.0.0.1:9527&quot;</span>.<span class="ident">into</span>(),
+        <span class="ident">network</span>: <span class="ident">NetworkType::Tcp</span>,
     };
     <span class="kw">let</span> <span class="ident">server_config</span> <span class="op">=</span> <span class="ident">ServerConfig</span> {
         <span class="ident">storage</span>: <span class="ident">StorageConfig::SledDb</span>(<span class="string">&quot;/tmp/kv_server&quot;</span>.<span class="ident">into</span>()),
