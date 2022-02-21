@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use futures::{future, Future, TryStreamExt};
 use std::marker::PhantomData;
 use tokio::io::{AsyncRead, AsyncWrite};
@@ -5,7 +6,9 @@ use tokio_util::compat::{Compat, FuturesAsyncReadCompatExt, TokioAsyncReadCompat
 use tracing::instrument;
 use yamux::{Config, Connection, ConnectionError, Control, Mode, WindowUpdateMode};
 
-use crate::ProstClientStream;
+use crate::{KvError, ProstClientStream};
+
+use super::AppStream;
 
 /// Yamux 控制结构
 pub struct YamuxCtrl<S> {
@@ -65,12 +68,17 @@ where
             _conn: PhantomData::default(),
         }
     }
+}
+
+#[async_trait]
+impl<S> AppStream for YamuxCtrl<S>
+where
+    S: AsyncRead + AsyncWrite + Unpin + Send + 'static,
+{
+    type InnerStream = Compat<yamux::Stream>;
 
     #[instrument(skip_all)]
-    /// 打开一个新的 stream
-    pub async fn open_stream(
-        &mut self,
-    ) -> Result<ProstClientStream<Compat<yamux::Stream>>, ConnectionError> {
+    async fn open_stream(&mut self) -> Result<ProstClientStream<Self::InnerStream>, KvError> {
         let stream = self.ctrl.open_stream().await?;
         Ok(ProstClientStream::new(stream.compat()))
     }

@@ -3,20 +3,42 @@ use std::time::Duration;
 use anyhow::Result;
 use futures::StreamExt;
 use simple_kv::{
-    start_client_with_config, ClientConfig, CommandRequest, KvError, ProstClientStream,
+    start_quic_client_with_config, start_yamux_client_with_config, AppStream, ClientConfig,
+    CommandRequest, KvError, NetworkType, ProstClientStream,
 };
-use tokio::time;
-use tokio_util::compat::Compat;
+use tokio::{
+    io::{AsyncRead, AsyncWrite},
+    time,
+};
 use tracing::info;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
-    let config: ClientConfig = toml::from_str(include_str!("../fixtures/client.conf"))?;
+    let config: ClientConfig = toml::from_str(include_str!("../fixtures/quic_client.conf"))?;
 
     // 打开一个 yamux ctrl
-    let mut ctrl = start_client_with_config(&config).await?;
+    match config.general.network {
+        NetworkType::Tcp => {
+            let ctrl = start_yamux_client_with_config(&config).await?;
+            process(ctrl).await?;
+        }
+        NetworkType::Quic => {
+            let ctrl = start_quic_client_with_config(&config).await?;
+            process(ctrl).await?;
+        }
+    }
 
+    println!("Done!");
+
+    Ok(())
+}
+
+async fn process<S, T>(mut ctrl: S) -> Result<()>
+where
+    S: AppStream<InnerStream = T>,
+    T: AsyncRead + AsyncWrite + Unpin + Send + 'static,
+{
     let channel = "lobby";
     start_publishing(ctrl.open_stream().await?, channel)?;
 
@@ -39,15 +61,13 @@ async fn main() -> Result<()> {
         println!("Got published data: {:?}", data);
     }
 
-    println!("Done!");
-
     Ok(())
 }
 
-fn start_publishing(
-    mut stream: ProstClientStream<Compat<yamux::Stream>>,
-    name: &str,
-) -> Result<(), KvError> {
+fn start_publishing<S>(mut stream: ProstClientStream<S>, name: &str) -> Result<(), KvError>
+where
+    S: AsyncRead + AsyncWrite + Unpin + Send + 'static,
+{
     let cmd = CommandRequest::new_publish(name, vec![1.into(), 2.into(), "hello".into()]);
     tokio::spawn(async move {
         time::sleep(Duration::from_millis(1000)).await;
@@ -58,11 +78,14 @@ fn start_publishing(
     Ok(())
 }
 
-fn start_unsubscribe(
-    mut stream: ProstClientStream<Compat<yamux::Stream>>,
+fn start_unsubscribe<S>(
+    mut stream: ProstClientStream<S>,
     name: &str,
     id: u32,
-) -> Result<(), KvError> {
+) -> Result<(), KvError>
+where
+    S: AsyncRead + AsyncWrite + Unpin + Send + 'static,
+{
     let cmd = CommandRequest::new_unsubscribe(name, id as _);
     tokio::spawn(async move {
         time::sleep(Duration::from_millis(2000)).await;

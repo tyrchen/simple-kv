@@ -1,7 +1,7 @@
 use anyhow::Result;
 use simple_kv::{
-    start_client_with_config, start_server_with_config, ClientConfig, CommandRequest, ServerConfig,
-    StorageConfig,
+    start_server_with_config, start_yamux_client_with_config, AppStream, ClientConfig,
+    CommandRequest, ServerConfig, StorageConfig,
 };
 use std::time::Duration;
 use tokio::time;
@@ -23,7 +23,7 @@ async fn yamux_server_client_full_tests() -> Result<()> {
     let mut config: ClientConfig = toml::from_str(include_str!("../fixtures/client.conf"))?;
     config.general.addr = addr.into();
 
-    let mut ctrl = start_client_with_config(&config).await.unwrap();
+    let mut ctrl = start_yamux_client_with_config(&config).await.unwrap();
     let mut stream = ctrl.open_stream().await?;
 
     // 生成一个 HSET 命令

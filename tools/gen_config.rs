@@ -1,7 +1,7 @@
 use anyhow::Result;
 use simple_kv::{
-    ClientConfig, ClientTlsConfig, GeneralConfig, LogConfig, RotationConfig, ServerConfig,
-    ServerTlsConfig, StorageConfig,
+    ClientConfig, ClientTlsConfig, GeneralConfig, LogConfig, NetworkType, RotationConfig,
+    ServerConfig, ServerTlsConfig, StorageConfig,
 };
 use std::fs;
 
@@ -12,6 +12,7 @@ fn main() -> Result<()> {
 
     let general_config = GeneralConfig {
         addr: "127.0.0.1:9527".into(),
+        network: NetworkType::Tcp,
     };
     let server_config = ServerConfig {
         storage: StorageConfig::SledDb("/tmp/kv_server".into()),

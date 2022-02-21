@@ -16,7 +16,7 @@ use tracing_subscriber::{
 async fn main() -> Result<()> {
     let config = match env::var("KV_SERVER_CONFIG") {
         Ok(path) => fs::read_to_string(&path).await?,
-        Err(_) => include_str!("../fixtures/server.conf").to_string(),
+        Err(_) => include_str!("../fixtures/quic_server.conf").to_string(),
     };
     let config: ServerConfig = toml::from_str(&config)?;
     let log = &config.log;

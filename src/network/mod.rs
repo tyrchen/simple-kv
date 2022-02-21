@@ -5,7 +5,7 @@ mod stream_result;
 mod tls;
 
 pub use frame::{read_frame, FrameCoder};
-pub use multiplex::YamuxCtrl;
+pub use multiplex::{AppStream, QuicCtrl, YamuxCtrl};
 pub use stream::ProstStream;
 pub use stream_result::StreamResult;
 pub use tls::{TlsClientConnector, TlsServerAcceptor};
@@ -13,7 +13,7 @@ pub use tls::{TlsClientConnector, TlsServerAcceptor};
 use crate::{CommandRequest, CommandResponse, KvError, Service, Storage};
 use futures::{SinkExt, StreamExt};
 use tokio::io::{AsyncRead, AsyncWrite};
-use tracing::info;
+use tracing::{info, warn};
 
 /// 处理服务器端的某个 accept 下来的 socket 的读写
 pub struct ProstServerStream<S, Store> {
@@ -44,7 +44,9 @@ where
             info!("Got a new command: {:?}", cmd);
             let mut res = self.service.execute(cmd);
             while let Some(data) = res.next().await {
-                stream.send(&data).await.unwrap();
+                if let Err(e) = stream.send(&data).await {
+                    warn!("Failed to send response: {e:?}");
+                }
             }
         }
         // info!("Client {:?} disconnected", self.addr);

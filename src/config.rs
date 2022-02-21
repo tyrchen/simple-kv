@@ -19,6 +19,21 @@ pub struct ClientConfig {
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct GeneralConfig {
     pub addr: String,
+    #[serde(default)]
+    pub network: NetworkType,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum NetworkType {
+    Tcp,
+    Quic,
+}
+
+impl Default for NetworkType {
+    fn default() -> Self {
+        NetworkType::Tcp
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
