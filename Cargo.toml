@@ -31,7 +31,7 @@ http = "0.2" # 我们使用 HTTP status code 所以引入这个类型库
 opentelemetry-jaeger = "0.16" # opentelemetry jaeger 支持
 prost = "0.9" # 处理 protobuf 的代码
 rustls-native-certs = "0.5" # 加载本机信任证书
-s2n-quic = "1"
+s2n-quic = "1.5"
 serde = { version = "1", features = ["derive"] } # 序列化/反序列化
 sled = "0.34" # sled db
 thiserror = "1" # 错误定义和处理
@@ -41,9 +41,9 @@ tokio-stream = { version = "0.1", features = ["sync"] } # 处理 stream
 tokio-util = { version = "0.7", features = ["compat"]} # tokio 和 futures 的兼容性库
 toml = "0.5" # toml 支持
 tracing = "0.1" # 日志处理
-tracing-appender = "0.2" # 文件日志
-tracing-opentelemetry = "0.17" # opentelemetry 支持
-tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] } # 日志处理
+tracing-appender = "0.2" # 追加文件日志
+tracing-opentelemetry = "0.17" # opentelemetry 链路追踪支持
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] } # 日志订阅处理
 yamux = "0.10" # yamux 多路复用支持
 
 [dev-dependencies]
